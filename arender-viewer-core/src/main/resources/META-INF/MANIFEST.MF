@@ -1,0 +1,10 @@
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Manifest-Version: 1.0
+Bundle-Vendor: org.nuxeo.viewer.arender
+Bundle-Version: 1.0.0
+Bundle-Name: arender-viewer-core
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.nuxeo.viewer.arender.arender-viewer-core;singleton=true
+Nuxeo-Component: OSGI-INF/auth-contrib.xml,
+ OSGI-INF/configuration-contrib.xml

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.viewer.arender.auth">
+
+  <extension target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService" point="authenticators">
+    <authenticationPlugin name="ARENDER_PORTAL_AUTH" enabled="true"
+                          class="org.nuxeo.ecm.platform.ui.web.auth.portal.PortalAuthenticator">
+      <loginModulePlugin>Trusting_LM</loginModulePlugin>
+      <parameters>
+        <parameter name="secret">aRenderTest</parameter>
+        <parameter name="maxAge">3600</parameter>
+      </parameters>
+    </authenticationPlugin>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService" point="specificChains">
+    <specificAuthenticationChain name="ARENDER_CMIS">
+      <urlPatterns>
+        <url>(.*)/cmis.*</url>
+      </urlPatterns>
+      <replacementChain>
+        <plugin>BASIC_AUTH</plugin>
+        <plugin>ARENDER_PORTAL_AUTH</plugin>
+        <plugin>FORM_AUTH</plugin>
+      </replacementChain>
+    </specificAuthenticationChain>
+  </extension>
+
+</component>

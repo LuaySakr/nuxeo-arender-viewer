@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.viewer.arender.configuration">
+
+  <require>org.nuxeo.ecm.core.api.properties</require>
+
+  <extension target="org.nuxeo.runtime.ConfigurationService" point="configuration">
+    <property name="arender.uri">http://localhost:8081/ARenderHMI</property>
+    <!-- Forcing an atom pub endpoint, with a different IP than the one from the originating request -->
+    <!--<property name="arender.nuxeo.cmis">http://10.213.3.37:8080/nuxeo/atom/cmis</property>-->
+
+    <!-- Override default segment maxsize due to aRender annotations storage mecanism -->
+    <property name="nuxeo.path.segment.maxsize">36</property>
+  </extension>
+
+</component>
