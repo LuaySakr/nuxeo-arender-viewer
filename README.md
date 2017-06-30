@@ -23,6 +23,7 @@
 ## Nuxeo
 
 - Create a `Folder` or a `Workspace` into `/default-domain/workspaces/annotations`.
+- Annotations Document will be stored inside with the logged user. On order to let users view and create annotations, you should add a `ReadWrite` permission to the right group. 
 - In order to change the default password (`aRenderTest`), add this kind of contribution:
  ```xml
  <require>org.nuxeo.viewer.arender.auth</require>
@@ -52,6 +53,7 @@
 
 - aRender requires to increase Segment Maximum Size as it uses original UUID document as annotations path segment. Size is increased to `36`.
 - CMIS do not support multiple stream on one node; and cannot access any other files than the main. Thus, aRender preview is disabled when not on main content.
+- Annotations are stored as Document, and created with the logged User. There is no way to have user's dedicated annotation, and annotations container must be accessible with `ReadWrite` access to everyone.
 
 ## Build
 
