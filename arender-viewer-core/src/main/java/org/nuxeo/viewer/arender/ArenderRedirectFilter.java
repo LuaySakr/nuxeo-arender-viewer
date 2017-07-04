@@ -90,7 +90,7 @@ public class ArenderRedirectFilter implements Filter {
     }
 
     protected static String getPropertyOrDefault(String key, String value) {
-        return Framework.getService(ConfigurationService.class).getProperty(key, null);
+        return Framework.getService(ConfigurationService.class).getProperty(key, value);
     }
 
     protected static String getURL(HttpServletRequest req) {
