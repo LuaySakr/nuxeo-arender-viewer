@@ -4,6 +4,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.services.config.ConfigurationService;
 
@@ -26,7 +28,7 @@ public class ArenderRedirectFilter implements Filter {
 
     protected static final Pattern PDFJS_URL = Pattern.compile(
 
-            "^(https?://.*?(?::\\d+)?/\\w+/)viewers/pdfjs/.*?/(?:repo/(\\w+)/)?id/(.{8}-.{4}-.{4}-.{4}-.{12})/(?:@blob/(\\w+:\\w+)/)?.*",
+            "^(https?://.*?(?::\\d+)?/\\w+/).*?viewers/pdfjs/.*?/(?:(?:repo/|nxfile/)(\\w+)/)?(?:id/)?(.{8}-.{4}-.{4}-.{4}-.{12})/(?:@blob/(\\w+:\\w+)/)?.*",
             CASE_INSENSITIVE);
 
     protected static final String CURRENT_USER_KEY = "currentUser";
@@ -50,17 +52,16 @@ public class ArenderRedirectFilter implements Filter {
             return;
         }
 
-        HttpSession session = ((HttpServletRequest) request).getSession();
-        if (session == null || session.getAttribute(CURRENT_USER_KEY) == null) {
-            chain.doFilter(request, response);
-            return;
-        }
-
         String serverUri = getPropertyOrDefault("arender.nuxeo.cmis", matcher.group(1).concat("atom/cmis"));
         String repository = matcher.group(2);
         String guid = matcher.group(3);
-        String user = session.getAttribute(CURRENT_USER_KEY).toString();
         String field = matcher.group(4);
+        String user = findConnectedUser((HttpServletRequest) request);
+
+        if (StringUtils.isEmpty(user)) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         if (field != null && !field.equals("file:content")) {
             // XXX Not handled by CMIS for now; only main stream
@@ -87,6 +88,20 @@ public class ArenderRedirectFilter implements Filter {
     @Override
     public void destroy() {
 
+    }
+
+    protected String findConnectedUser(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session != null && session.getAttribute(CURRENT_USER_KEY) != null) {
+            return ((NuxeoPrincipal) session.getAttribute(CURRENT_USER_KEY)).getActingUser();
+        }
+
+        Principal userPrincipal = request.getUserPrincipal();
+        if (userPrincipal != null && (userPrincipal instanceof NuxeoPrincipal)) {
+            return ((NuxeoPrincipal) userPrincipal).getActingUser();
+        }
+
+        return null;
     }
 
     protected static String getPropertyOrDefault(String key, String value) {

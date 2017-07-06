@@ -20,6 +20,8 @@ public class RegexTest {
 
     public static final String COMPLEX = "https://external-arender.test.io.sample.com/nuxeo/viewers/pdfjs/web/viewer.html?file=https://nuxeo-arender.prod.io.nuxeo.com/nuxeo/site/api/v1/repo/default/id/1e6ec4de-f420-4e9d-a8f5-3a45ff4235b1/@blob/file:content/@preview/pdf";
 
+    public static final String WEBUI = "https://nuxeo-arender.prod.io.nuxeo.com/nuxeo//ui/bower_components/nuxeo-ui-elements/viewers/pdfjs/web/viewer.html?file=https://nuxeo-arender.prod.io.nuxeo.com:80/nuxeo/nxfile/default/1e6ec4de-f420-4e9d-a8f5-3a45ff4235b1/file:content/Nuxeo-Tech-Brief-Architecture-for-a-Scalable-Enterprise-Content-Repository.pdf";
+
     @Test
     public void testRegex() {
         assertMatchAndGroup(WITH_FIELD, "http://localhost:8080/nuxeo/", "default",
@@ -32,6 +34,12 @@ public class RegexTest {
                 null);
         assertMatchAndGroup(COMPLEX, "https://external-arender.test.io.sample.com/nuxeo/", "default",
                 "1e6ec4de-f420-4e9d-a8f5-3a45ff4235b1", "file:content");
+    }
+
+    @Test
+    public void testWebUI() {
+        assertMatchAndGroup(WEBUI, "https://nuxeo-arender.prod.io.nuxeo.com/nuxeo/", "default",
+                "1e6ec4de-f420-4e9d-a8f5-3a45ff4235b1", null);
     }
 
     protected static void assertMatchAndGroup(String input, String... matches) {
