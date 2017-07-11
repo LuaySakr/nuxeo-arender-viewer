@@ -7,4 +7,5 @@ Bundle-Name: arender-viewer-core
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.nuxeo.viewer.arender.arender-viewer-core;singleton=true
 Nuxeo-Component: OSGI-INF/auth-contrib.xml,
- OSGI-INF/configuration-contrib.xml
+ OSGI-INF/configuration-contrib.xml,
+ OSGI-INF/webui-contrib.xml

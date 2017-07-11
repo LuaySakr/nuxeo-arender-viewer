@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <fragment version="1">
+  <require>all</require>
+
   <extension target="web#FIRST-FILTER">
     <filter>
       <display-name>Nuxeo PDF.js rewriter to aRender Servlet</display-name>
@@ -13,4 +15,11 @@
       <url-pattern>/*</url-pattern>
     </filter-mapping>
   </extension>
+
+  <install>
+    <delete path="${bundle.fileName}.tmp"/>
+    <unzip from="${bundle.fileName}" to="${bundle.fileName}.tmp"/>
+    <copy from="${bundle.fileName}.tmp/web/nuxeo.war" to="/"/>
+    <delete path="${bundle.fileName}.tmp"/>
+  </install>
 </fragment>

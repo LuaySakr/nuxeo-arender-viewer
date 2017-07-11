@@ -1,0 +1,50 @@
+<!-- Contribution of element 'nuxeo-date-picker' for slot 'DOCUMENT_ACTIONS' -->
+<nuxeo-slot-content name="arender-dialog" slot="DOCUMENT_ACTIONS" order="5">
+  <template>
+    <!-- declare custom element -->
+    <dom-module id="arender-preview">
+      <template>
+        <style is="custom-style">
+          #dialog {
+            min-height: 85%;
+            min-width: 85%;
+          }
+
+          #arender {
+            width: 100%;
+            height: 100%;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+        </style>
+
+        <paper-icon-button icon="icons:chrome-reader-mode" on-tap="_toggle"></paper-icon-button>
+        <nuxeo-dialog id="dialog" auto-fit-on-attach="true">
+          <iframe id="arender" frameborder="0" scrolling="no" onload="updateHeight(this)"></iframe>
+        </nuxeo-dialog>
+      </template>
+      <script>
+        function updateHeight(tep) {
+          tep.style.height = tep.parentElement.style.maxHeight;
+        }
+
+        Polymer({
+          is: 'arender-preview',
+          properties: {
+            doc: Object
+          },
+
+          _toggle: function () {
+            // Generating pdfjs based url that will be handled by org.nuxeo.viewer.arender.ArenderRedirectFilter
+            var url = '/nuxeo/ui/bower_components/nuxeo-ui-elements/viewers/pdfjs/web/viewer.html?file=http://dummyserver/nuxeo/nxfile/default/' + this.doc.uid + '/file:content/dummy.file';
+            this.$.arender.setAttribute('src', url);
+            return this.$.dialog.toggle();
+          }
+        });
+      </script>
+    </dom-module>
+
+    <!-- use custom element -->
+    <arender-preview doc="[[document]]"></arender-preview>
+  </template>
+</nuxeo-slot-content>
